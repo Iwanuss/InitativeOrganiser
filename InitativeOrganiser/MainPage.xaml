@@ -1,0 +1,12 @@
+﻿<Page
+    x:Name="MainView"
+    x:Class="InitativeOrganiser.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:InitativeOrganiser"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="BagnoList">
+        <Button x:Name="sort_button" Content="Sort" Height="99" Margin="1071,849,0,0" VerticalAlignment="Top" Width="258"/>
+    </Grid>
+</Page>
