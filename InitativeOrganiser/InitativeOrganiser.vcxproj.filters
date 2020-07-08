@@ -49,4 +49,7 @@
   <ItemGroup>
     <Page Include="MainPage.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="InitativeOrganiser_TemporaryKey.pfx" />
+  </ItemGroup>
 </Project>

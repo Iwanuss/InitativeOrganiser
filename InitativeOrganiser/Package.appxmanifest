@@ -8,14 +8,14 @@
 
   <Identity
     Name="af6083b3-2dbc-48d5-bba8-51736882f994"
-    Publisher="CN=kacpe"
-    Version="1.0.0.0" />
+    Publisher="CN=Iwanuss"
+    Version="0.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="af6083b3-2dbc-48d5-bba8-51736882f994" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>InitativeOrganiser</DisplayName>
-    <PublisherDisplayName>kacpe</PublisherDisplayName>
+    <PublisherDisplayName>Iwanuss</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

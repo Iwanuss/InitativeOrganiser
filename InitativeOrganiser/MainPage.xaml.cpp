@@ -62,7 +62,7 @@ void MainPage::AddNewRow() {
 
 void MainPage::AddNewTextBox() {
 	this->AddNewRow();
-	InitiativeEntry^ NewEntry = ref new InitiativeEntry(this->InitiativeList, this->rowsNumber);
+	InitiativeEntry^ NewEntry = ref new InitiativeEntry(this, this->InitiativeList, this->rowsNumber);
 	this->Entries.push_back(NewEntry);
 	this->rowsNumber++;
 	this->UpdateButtons();
@@ -128,4 +128,17 @@ void MainPage::AddNewText(String^ Content, int column) {
 	this->InitiativeList->Children->Append(Text);
 	Grid::SetRow(Text, 0);
 	Grid::SetColumn(Text, column);
+}
+
+void MainPage::DeleteEntry(int entry_index) {
+	InitiativeEntry^ Entry = this->Entries.at(entry_index - 1);
+	Entry->SetToInvisible();
+	this->Entries.erase(this->Entries.begin()+entry_index-1);
+	/*for (unsigned int i = entry_index; i < Entries.size(); i++) {
+		Entry = this->Entries.at(i);
+		Entry->DecreaseRow();
+	}*/
+	this->rowsNumber--;
+	this->UpdateButtons();
+	this->Redraw();
 }

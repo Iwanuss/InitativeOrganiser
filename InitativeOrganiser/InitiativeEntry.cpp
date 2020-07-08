@@ -16,12 +16,19 @@ InitiativeEntry::InitiativeEntry() {
 	this->row = 0;
 }
 
-InitiativeEntry::InitiativeEntry(Grid^ InitiativeList, int row) {
+InitiativeEntry::InitiativeEntry(MainPage^ Parent, Grid^ InitiativeList, int row) {
+	this->Parent = Parent;
 	this->row = row;
 	int number_of_box = 0;
 	this->NameTextBox = NewTextBox(InitiativeList, number_of_box++);
 	this->InitiativeTextBox = NewTextBox(InitiativeList, number_of_box++);
 	this->HPTextBox = NewTextBox(InitiativeList, number_of_box++);
+	this->DeleteButton = ref new Button();
+	this->DeleteButton->Content = "X";
+	this->DeleteButton->Click += ref new RoutedEventHandler(this, &InitativeOrganiser::InitiativeEntry::DeleteButton_Click);
+	InitiativeList->Children->Append(this->DeleteButton);
+	Grid::SetColumn(this->DeleteButton, number_of_box++);
+	Grid::SetRow(this->DeleteButton, this->row);
 	// Autosorting on changing initiative value currently disabled
 	//this->InitiativeTextBox->TextChanged += ref new TextChangedEventHandler(this, &InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed);
 }
@@ -48,4 +55,19 @@ void InitiativeEntry::RedrawEntry(int row) {
 	Grid::SetRow(this->NameTextBox, row);
 	Grid::SetRow(this->InitiativeTextBox, row);
 	Grid::SetRow(this->HPTextBox, row);
+	Grid::SetRow(this->DeleteButton, row);
+}
+
+void InitiativeEntry::DeleteButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e) {
+	this->Parent->DeleteEntry(this->row);
+}
+
+void InitiativeEntry::DecreaseRow() {
+	this->row--;
+}
+void InitiativeEntry::SetToInvisible() {
+	this->NameTextBox->Visibility = Visibility::Collapsed;
+	this->InitiativeTextBox->Visibility = Visibility::Collapsed;
+	this->HPTextBox->Visibility = Visibility::Collapsed;
+	this->DeleteButton->Visibility = Visibility::Collapsed;
 }

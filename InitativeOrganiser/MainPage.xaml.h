@@ -12,7 +12,7 @@
 #include "MainPage.g.h"
 //#include "InitiativeEntry.h"
 
-#define ROW_NUMBER 5
+#define ROW_NUMBER 4
 
 namespace InitativeOrganiser
 {
@@ -25,6 +25,7 @@ namespace InitativeOrganiser
 	public:
 		MainPage();
 		void SortInitiative();
+		void DeleteEntry(int entry_index);
 	private:
 		Windows::UI::Xaml::Controls::Button^ add_button;
 		Windows::UI::Xaml::Controls::Button^ SortButton;

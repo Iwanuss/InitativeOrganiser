@@ -11,17 +11,22 @@ namespace InitativeOrganiser {
 	{
 	public:
 		InitiativeEntry();
-		InitiativeEntry(Windows::UI::Xaml::Controls::Grid^ InitiativeList, int row);
+		InitiativeEntry(MainPage^ Parent, Windows::UI::Xaml::Controls::Grid^ InitiativeList, int row);
 		int GetInitiative();
 		void RedrawEntry(int row);
+		void DecreaseRow();
+		void SetToInvisible();
 	private:
 		Windows::UI::Xaml::Controls::TextBox^ NameTextBox;
 		Windows::UI::Xaml::Controls::TextBox^ InitiativeTextBox;
 		Windows::UI::Xaml::Controls::TextBox^ HPTextBox;
+		Windows::UI::Xaml::Controls::Button^ DeleteButton;
+		MainPage^ Parent;
 		int row;
 
 		Windows::UI::Xaml::Controls::TextBox^ NewTextBox(Windows::UI::Xaml::Controls::Grid^ InitiativeList, int column);
 		void InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e);
+		void DeleteButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 	};
 }
 #endif
