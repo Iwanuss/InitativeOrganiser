@@ -12,19 +12,18 @@
 #include "MainPage.g.h"
 //#include "InitiativeEntry.h"
 
-#define ROW_NUMBER 4
+#define COLUMN_NUMBER 4
 
 namespace InitativeOrganiser
 {
 	ref class InitiativeEntry;
 	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
+	/// Main page of the app, containing initiative list
 	/// </summary>
 	public ref class MainPage sealed
 	{
 	public:
 		MainPage();
-		void SortInitiative();
 		void DeleteEntry(int entry_index);
 	private:
 		Windows::UI::Xaml::Controls::Button^ add_button;
@@ -33,6 +32,7 @@ namespace InitativeOrganiser
 		Windows::UI::Xaml::Controls::Grid^ InitiativeList;
 		int rowsNumber;
 
+		void SortInitiative();
 		void add_button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void SortButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void AddNewTextBox();

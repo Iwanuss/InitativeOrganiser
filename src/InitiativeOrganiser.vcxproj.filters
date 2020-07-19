@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Common">
-      <UniqueIdentifier>2e3ae69a-9b35-4ae0-b696-600c525394fb</UniqueIdentifier>
+    <Filter Include="InitiativeEntry">
+      <UniqueIdentifier>{9712a7e7-8c58-4fd5-b5f2-26b7f15cc1f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -10,19 +10,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="InitiativeEntry.cpp" />
+    <ClCompile Include="InitiativeEntry.cpp">
+      <Filter>InitiativeEntry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="InitiativeEntry.h" />
+    <ClInclude Include="InitiativeEntry.h">
+      <Filter>InitiativeEntry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="InitativeOrganiser_TemporaryKey.pfx" />
   </ItemGroup>
 </Project>

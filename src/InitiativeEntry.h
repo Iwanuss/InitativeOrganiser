@@ -7,10 +7,10 @@
 
 
 namespace InitativeOrganiser {
+	// Class for all controls in a single page grid row. Object is a single InitiativeList entry.
 	 ref class InitiativeEntry sealed
 	{
 	public:
-		InitiativeEntry();
 		InitiativeEntry(MainPage^ Parent, Windows::UI::Xaml::Controls::Grid^ InitiativeList, int row);
 		int GetInitiative();
 		void RedrawEntry(int row);
