@@ -90,7 +90,7 @@ void MainPage::AddNewRow() {
 */
 void MainPage::AddNewTextBox() {
 	this->AddNewRow();
-	InitiativeEntry^ NewEntry = ref new InitiativeEntry(this, this->InitiativeList, this->rowsNumber);
+	InitiativeEntry^ NewEntry = ref new InitiativeEntry(this);
 	this->Entries.push_back(NewEntry);
 	this->rowsNumber++;
 	this->UpdateButtons();

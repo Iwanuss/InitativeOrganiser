@@ -15,27 +15,17 @@ using namespace std;
 /*
 	@brief Constructor creating InitiativeEntry with initialized all TextBox adn Button fields and adding it to parent Grid
 	@param MainPage^ Parent - handle to parent page to call it's methods on events
-	@param Grid^ InitiativeList - parent grid in which this object will be placed
-	@param int row - index of grid row in which this object will be placed
 */
-InitiativeEntry::InitiativeEntry(MainPage^ Parent, Grid^ InitiativeList, int row) {
+InitiativeEntry::InitiativeEntry(MainPage^ Parent) {
 	this->Parent = Parent;
-	this->row = row;
+	this->row = Parent->GetRowsNumber();
 
 	// Initialize all text boxes
-	int number_of_box = 0;
-	this->NameTextBox = NewTextBox(InitiativeList, number_of_box++);
-	this->InitiativeTextBox = NewTextBox(InitiativeList, number_of_box++);
-	this->HPTextBox = NewTextBox(InitiativeList, number_of_box++);
+	this->AddNewField();
 
 	// Initialize DeleteButton
-	this->DeleteButton = ref new Button();
-	this->DeleteButton->Content = "X";
+	this->DeleteButton = NewButton(COLUMN_NUMBER, "X");
 	this->DeleteButton->Click += ref new RoutedEventHandler(this, &InitativeOrganiser::InitiativeEntry::DeleteButton_Click);
-	InitiativeList->Children->Append(this->DeleteButton);
-	Grid::SetColumn(this->DeleteButton, number_of_box++);
-	Grid::SetRow(this->DeleteButton, this->row);
-
 
 	// Autosorting on changing initiative value currently disabled
 	//this->InitiativeTextBox->TextChanged += ref new TextChangedEventHandler(this, &InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed);
@@ -43,16 +33,30 @@ InitiativeEntry::InitiativeEntry(MainPage^ Parent, Grid^ InitiativeList, int row
 
 /*
 	@brief Creates new text box and appends it to object parent grid
-	@param Grid^ InitiativeList - Object paren grid to which this new textbox will be appended
 	@param int column - Index of grid column in which this text box will be placed
 	@return TextBox^ - Handle to newly created tex box
 */
-TextBox^ InitiativeEntry::NewTextBox(Grid^ InitiativeList, int column) {
+TextBox^ InitiativeEntry::NewTextBox(int column) {
 	TextBox^ Tbox = ref new TextBox();
-	InitiativeList->Children->Append(Tbox);
+	this->Parent->GetInitiativeList()->Children->Append(Tbox);
 	Grid::SetColumn(Tbox, column);
 	Grid::SetRow(Tbox, this->row);
 	return Tbox;
+}
+
+/*
+	@brief Creates new button and appends it to object parent grid
+	@param int column - Index of grid column in which this text box will be placed
+	@param String^ Content - Text displayed on the button
+	@return Button^ - Handle to newly created button
+*/
+Button^ InitiativeEntry::NewButton(int column, String^ Content) {
+	Button^ But = ref new Button();
+	But->Content = Content;
+	this->Parent->GetInitiativeList()->Children->Append(But);
+	Grid::SetColumn(But, column);
+	Grid::SetRow(But, this->row);
+	return But;
 }
 
 /*
@@ -68,7 +72,7 @@ void InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed(Platform::Ob
 	@return int - content of this->InitiativeTextBox converted to int
 */
 int InitiativeEntry::GetInitiative() {
-	return _wtoi(this->InitiativeTextBox->Text->Data()); // Convert from Platform::String^ to int
+	return _wtoi(this->Fields.at(INITIATIVE_COLUMN_INDEX)->Text->Data()); // Convert from Platform::String^ to int
 }
 
 /*
@@ -77,9 +81,9 @@ int InitiativeEntry::GetInitiative() {
 */
 void InitiativeEntry::RedrawEntry(int row) {
 	this->row = row;
-	Grid::SetRow(this->NameTextBox, row);
-	Grid::SetRow(this->InitiativeTextBox, row);
-	Grid::SetRow(this->HPTextBox, row);
+	for (TextBox^ n : this->Fields) {
+		Grid::SetRow(n, row);
+	}
 	Grid::SetRow(this->DeleteButton, row);
 }
 
@@ -101,8 +105,19 @@ void InitiativeEntry::DecreaseRow() {
 	@brief Sets Visibility of all controls in object to Collapsed.
 */
 void InitiativeEntry::SetToInvisible() {
-	this->NameTextBox->Visibility = Visibility::Collapsed;
-	this->InitiativeTextBox->Visibility = Visibility::Collapsed;
-	this->HPTextBox->Visibility = Visibility::Collapsed;
+	for (TextBox^ n : this->Fields) {
+		n->Visibility = Visibility::Collapsed;
+	}
 	this->DeleteButton->Visibility = Visibility::Collapsed;
+}
+
+/*
+	@brief Adds new InitiativeEntry to the list. It's placed in the grid betwwen last entry and button row.
+*/
+void InitiativeEntry::AddNewField() {
+	TextBox^ Tbox;
+	for (int i = 0; i < COLUMN_NUMBER-1; i++) {
+		Tbox = this->NewTextBox(i);
+		this->Fields.push_back(Tbox);
+	}
 }

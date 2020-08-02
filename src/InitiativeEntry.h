@@ -5,28 +5,30 @@
 
 #include "MainPage.xaml.h"
 
+#define INITIATIVE_COLUMN_INDEX 1
+
 
 namespace InitativeOrganiser {
 	// Class for all controls in a single page grid row. Object is a single InitiativeList entry.
 	 ref class InitiativeEntry sealed
 	{
 	public:
-		InitiativeEntry(MainPage^ Parent, Windows::UI::Xaml::Controls::Grid^ InitiativeList, int row);
+		InitiativeEntry(MainPage^ Parent);
 		int GetInitiative();
 		void RedrawEntry(int row);
 		void DecreaseRow();
 		void SetToInvisible();
 	private:
-		Windows::UI::Xaml::Controls::TextBox^ NameTextBox;
-		Windows::UI::Xaml::Controls::TextBox^ InitiativeTextBox;
-		Windows::UI::Xaml::Controls::TextBox^ HPTextBox;
+		std::vector<Windows::UI::Xaml::Controls::TextBox^> Fields;
 		Windows::UI::Xaml::Controls::Button^ DeleteButton;
 		MainPage^ Parent;
 		int row;
 
-		Windows::UI::Xaml::Controls::TextBox^ NewTextBox(Windows::UI::Xaml::Controls::Grid^ InitiativeList, int column);
+		Windows::UI::Xaml::Controls::TextBox^ NewTextBox(int column);
 		void InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ e);
 		void DeleteButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void InitiativeEntry::AddNewField();
+		Windows::UI::Xaml::Controls::Button^ NewButton(int column, Platform::String^ Content);
 	};
 }
 #endif

@@ -25,6 +25,8 @@ namespace InitativeOrganiser
 	public:
 		MainPage();
 		void DeleteEntry(int entry_index);
+		Windows::UI::Xaml::Controls::Grid^ GetInitiativeList() { return this->InitiativeList; }
+		int GetRowsNumber() { return this->rowsNumber; }
 	private:
 		Windows::UI::Xaml::Controls::Button^ add_button;
 		Windows::UI::Xaml::Controls::Button^ SortButton;
