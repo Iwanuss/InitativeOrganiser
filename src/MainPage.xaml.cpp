@@ -20,6 +20,7 @@ using namespace Windows::UI::Xaml::Input;
 using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace Windows::UI::Core;
+using namespace std;
 
 
 /*
@@ -35,9 +36,12 @@ MainPage::MainPage()
 	//InitiativeList->Height = 200;
 
 	// Initializaing grid columns
-	for (int i = 0; i < COLUMN_NUMBER; i++) {
+	for (int i = 0; i < COLUMN_NUMBER + INITIATIVE_MENU_OFFSET; i++) {
 		ColumnDefinition^ StandardColumn = ref new ColumnDefinition();
-		StandardColumn->Width = *(ref new GridLength(1, GridUnitType::Auto));
+		if (i != COLUMN_NUMBER + INITIATIVE_MENU_OFFSET-2)
+			StandardColumn->Width = *(ref new GridLength(1, GridUnitType::Auto));
+		else
+			StandardColumn->Width = *(ref new GridLength(100, GridUnitType::Pixel)); // Adding buffor between entries table and list menu controls
 		this->InitiativeList->ColumnDefinitions->Append(StandardColumn);
 	}
 
@@ -57,8 +61,16 @@ MainPage::MainPage()
 	// Adding keyboard shortcuts handler
 	CoreWindow::GetForCurrentThread()->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &InitativeOrganiser::MainPage::ShortcutHandler);
 
+	// Adding initiative list menu controls
+	this->NextButton = AddNewButton("Start", COLUMN_NUMBER + INITIATIVE_MENU_OFFSET - 1);
+	this->NextButton->Click += ref new RoutedEventHandler(this, &InitativeOrganiser::MainPage::NextButton_Click);
+	Grid::SetRow(NextButton, 1);
+
 	// Setting created grid as page content
 	this->Content = InitiativeList;
+
+	// At the beggining, no entry has the initiative token
+	this->initiativeToken = -1;
 }
 
 /*
@@ -227,5 +239,25 @@ void MainPage::ShortcutHandler(CoreWindow^ sender, KeyEventArgs^ args) {
 	if (PressedKey == Windows::System::VirtualKey::D && args->KeyStatus.WasKeyDown
 		&& (ConstrolState == CoreVirtualKeyStates::Down + CoreVirtualKeyStates::Locked || ConstrolState == CoreVirtualKeyStates::Down)) {
 		this->DeleteLastEntry();
+	}
+}
+
+/*
+	@brief  Click event callback for 'NextButton' button. Highlights next entry in the list and sets previous to inactive. If list hasn't been started yet, highlights first entry.
+*/
+void InitativeOrganiser::MainPage::NextButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e) {
+	if (this->initiativeToken == -1) {
+		this->Entries.at(0)->SetActive();
+		this->initiativeToken = 0;
+		this->NextButton->Content = "Next";
+	}
+	else if (this->initiativeToken++ < this->Entries.size() - 1){
+		this->Entries.at(this->initiativeToken)->SetActive();
+		this->Entries.at(this->initiativeToken-1)->SetInactive();
+	}
+	else {
+		this->Entries.at(0)->SetActive();
+		this->Entries.at(Entries.size()-1)->SetInactive();
+		this->initiativeToken = 0;
 	}
 }

@@ -10,6 +10,8 @@ using namespace Platform;
 using namespace InitativeOrganiser;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml;
+using namespace Windows::UI::Xaml::Media;
+using namespace Windows::UI;
 using namespace std;
 
 /*
@@ -119,5 +121,23 @@ void InitiativeEntry::AddNewField() {
 	for (int i = 0; i < COLUMN_NUMBER-1; i++) {
 		Tbox = this->NewTextBox(i);
 		this->Fields.push_back(Tbox);
+	}
+}
+
+/*
+	@brief Highlights all text boxes in this entry to predefined color.
+*/
+void InitiativeEntry::SetActive() {
+	for (TextBox^ n : this->Fields) {
+		n->Background = ref new SolidColorBrush(Colors::Green);
+	}
+}
+
+/*
+	@brief Deletes special coloring in all text boxes in this entry.
+*/
+void InitiativeEntry::SetInactive() {
+	for (TextBox^ n : this->Fields) {
+		n->Background = ref new SolidColorBrush();
 	}
 }

@@ -18,6 +18,8 @@ namespace InitativeOrganiser {
 		void RedrawEntry(int row);
 		void DecreaseRow();
 		void SetToInvisible();
+		void SetActive();
+		void SetInactive();
 	private:
 		std::vector<Windows::UI::Xaml::Controls::TextBox^> Fields;
 		Windows::UI::Xaml::Controls::Button^ DeleteButton;

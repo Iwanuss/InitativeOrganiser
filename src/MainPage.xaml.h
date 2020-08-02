@@ -13,6 +13,7 @@
 //#include "InitiativeEntry.h"
 
 #define COLUMN_NUMBER 4
+#define INITIATIVE_MENU_OFFSET 2
 
 namespace InitativeOrganiser
 {
@@ -30,13 +31,16 @@ namespace InitativeOrganiser
 	private:
 		Windows::UI::Xaml::Controls::Button^ add_button;
 		Windows::UI::Xaml::Controls::Button^ SortButton;
+		Windows::UI::Xaml::Controls::Button^ NextButton;
 		std::vector<InitiativeEntry^> Entries;
 		Windows::UI::Xaml::Controls::Grid^ InitiativeList;
 		int rowsNumber;
+		int initiativeToken; // Index of initiative entry which currently holds the initiative
 
 		void SortInitiative();
 		void add_button_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void SortButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+		void NextButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
 		void AddNewTextBox();
 		void AddNewRow();
 		void Redraw();
