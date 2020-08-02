@@ -19,6 +19,7 @@ using namespace Windows::UI::Xaml::Data;
 using namespace Windows::UI::Xaml::Input;
 using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Navigation;
+using namespace Windows::UI::Core;
 
 
 /*
@@ -52,6 +53,9 @@ MainPage::MainPage()
 	this->rowsNumber = 0;
 	this->DrawHeader();
 	this->AddNewTextBox();
+
+	// Adding keyboard shortcuts handler
+	CoreWindow::GetForCurrentThread()->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &InitativeOrganiser::MainPage::ShortcutHandler);
 
 	// Setting created grid as page content
 	this->Content = InitiativeList;
@@ -188,4 +192,40 @@ void MainPage::DeleteEntry(int entry_index) {
 	this->rowsNumber--;
 	this->UpdateButtons();
 	this->Redraw();
+}
+
+/*
+	@brief Deletes last entry from the list, if any is left
+*/
+void MainPage::DeleteLastEntry() {
+	if(this->rowsNumber > 1) // no entries to delete if only button row left
+		this->DeleteEntry(this->rowsNumber - 1);
+}
+
+/*
+	@brief Handles keyboard shortcuts via global window TypedEventHandler
+*/
+//void MainPage::ShortcutHandler(CoreDispatcher^ sender, AcceleratorKeyEventArgs^ args) {
+void MainPage::ShortcutHandler(CoreWindow^ sender, KeyEventArgs^ args) {
+	CoreVirtualKeyStates ConstrolState = CoreWindow::GetForCurrentThread()->GetKeyState(Windows::System::VirtualKey::Control); // is control key pressed
+	Windows::System::VirtualKey PressedKey = args->VirtualKey; // key which triggered this event
+
+	// Ctrl+A shortcut for adding new entry
+	if (PressedKey == Windows::System::VirtualKey::A && args->KeyStatus.WasKeyDown
+ 		&& (ConstrolState == CoreVirtualKeyStates::Down + CoreVirtualKeyStates::Locked || ConstrolState == CoreVirtualKeyStates::Down)) {
+		this->AddNewTextBox();
+	}
+
+	// Ctrl+S shortcut for sorting the list
+	if (PressedKey == Windows::System::VirtualKey::S && args->KeyStatus.WasKeyDown
+		&& (ConstrolState == CoreVirtualKeyStates::Down + CoreVirtualKeyStates::Locked || ConstrolState == CoreVirtualKeyStates::Down)) {
+		this->SortInitiative();
+	}
+
+	// Ctrl+D deleting last entry
+	// Ctrl+S shortcut for sorting the list
+	if (PressedKey == Windows::System::VirtualKey::D && args->KeyStatus.WasKeyDown
+		&& (ConstrolState == CoreVirtualKeyStates::Down + CoreVirtualKeyStates::Locked || ConstrolState == CoreVirtualKeyStates::Down)) {
+		this->DeleteLastEntry();
+	}
 }

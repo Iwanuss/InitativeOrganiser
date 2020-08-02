@@ -42,6 +42,8 @@ namespace InitativeOrganiser
 		void UpdateButtons();
 		void AddNewText(Platform::String^ Content, int column);
 		Windows::UI::Xaml::Controls::Button^ AddNewButton(Platform::String^ Content, int column);
+		void MainPage::ShortcutHandler(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args);
+		void MainPage::DeleteLastEntry();
 	};
 }
 
