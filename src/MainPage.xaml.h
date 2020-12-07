@@ -10,9 +10,8 @@
 #include <vector>
 
 #include "MainPage.g.h"
-//#include "InitiativeEntry.h"
+#include "InitiativeEntry.h"
 
-#define COLUMN_NUMBER 4
 #define INITIATIVE_MENU_OFFSET 2
 
 namespace InitativeOrganiser

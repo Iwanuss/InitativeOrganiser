@@ -22,15 +22,8 @@ InitiativeEntry::InitiativeEntry(MainPage^ Parent) {
 	this->Parent = Parent;
 	this->row = Parent->GetRowsNumber();
 
-	// Initialize all text boxes
+	// Initialize all text boxes and buttons
 	this->AddNewField();
-
-	// Initialize DeleteButton
-	this->DeleteButton = NewButton(COLUMN_NUMBER, "X");
-	this->DeleteButton->Click += ref new RoutedEventHandler(this, &InitativeOrganiser::InitiativeEntry::DeleteButton_Click);
-
-	// Autosorting on changing initiative value currently disabled
-	//this->InitiativeTextBox->TextChanged += ref new TextChangedEventHandler(this, &InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed);
 }
 
 /*
@@ -52,12 +45,14 @@ TextBox^ InitiativeEntry::NewTextBox(int column) {
 	@param String^ Content - Text displayed on the button
 	@return Button^ - Handle to newly created button
 */
-Button^ InitiativeEntry::NewButton(int column, String^ Content) {
+Button^ InitiativeEntry::NewButton(int column, String^ Content, void (InitativeOrganiser::InitiativeEntry::* fnPtr)(Object^, RoutedEventArgs^)) {
 	Button^ But = ref new Button();
 	But->Content = Content;
 	this->Parent->GetInitiativeList()->Children->Append(But);
 	Grid::SetColumn(But, column);
 	Grid::SetRow(But, this->row);
+	//RoutedEventArgs^ FnPtr = &InitativeOrganiser::InitiativeEntry::DeleteButton_Click;
+	But->Click += ref new RoutedEventHandler(this, fnPtr);
 	return But;
 }
 
@@ -74,7 +69,8 @@ void InitativeOrganiser::InitiativeEntry::InitiativeTextBox_Changed(Platform::Ob
 	@return int - content of this->InitiativeTextBox converted to int
 */
 int InitiativeEntry::GetInitiative() {
-	return _wtoi(this->Fields.at(INITIATIVE_COLUMN_INDEX)->Text->Data()); // Convert from Platform::String^ to int
+	TextBox^ Text = (TextBox^) this->Fields.at(INITIATIVE_COLUMN_INDEX);
+	return _wtoi(Text->Text->Data()); // Convert from Platform::String^ to int
 }
 
 /*
@@ -83,10 +79,10 @@ int InitiativeEntry::GetInitiative() {
 */
 void InitiativeEntry::RedrawEntry(int row) {
 	this->row = row;
-	for (TextBox^ n : this->Fields) {
+	for (Control^ n : this->Fields) {
 		Grid::SetRow(n, row);
 	}
-	Grid::SetRow(this->DeleteButton, row);
+	//Grid::SetRow(this->DeleteButton, row);
 }
 
 /*
@@ -95,6 +91,36 @@ void InitiativeEntry::RedrawEntry(int row) {
 void InitiativeEntry::DeleteButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e) {
 	this->Parent->DeleteEntry(this->row);
 }
+
+// Dmg button early func
+/*void InitiativeEntry::CommandInvokedHandler(IUICommand^ command)
+{
+	TextBox^ HpText;
+	int hpValue;
+	string s_str = "10";
+	wstring wid_str;
+	const wchar_t* w_char;
+	long boi;
+	//char ch[10];
+	//ostringstream os;
+	//stringstream ss;
+
+	HpText = dynamic_cast<TextBox^>(this->Fields.at(HP_COLUMN_INDEX));
+	if (HpText)
+		hpValue = _wtoi(HpText->Text->Data());
+	hpValue -= 5;
+	
+	//boi = stol("5");
+	//s_str = to_string(hpValue);
+	//os << hpValue;
+	//s_str = os.str();
+	//to_char(ch, ch+10, hpValue);
+	//ss << hpValue;
+	//s_str = ss.str();
+	wstring(s_str.begin(), s_str.end());
+	w_char = wid_str.c_str();
+	HpText->Text = ref new String(w_char);
+}*/
 
 /*
 	@brief Decrements this->row by 1
@@ -107,20 +133,24 @@ void InitiativeEntry::DecreaseRow() {
 	@brief Sets Visibility of all controls in object to Collapsed.
 */
 void InitiativeEntry::SetToInvisible() {
-	for (TextBox^ n : this->Fields) {
+	for (Control^ n : this->Fields) {
 		n->Visibility = Visibility::Collapsed;
 	}
-	this->DeleteButton->Visibility = Visibility::Collapsed;
+	//this->DeleteButton->Visibility = Visibility::Collapsed;
 }
 
 /*
 	@brief Adds new InitiativeEntry to the list. It's placed in the grid betwwen last entry and button row.
 */
 void InitiativeEntry::AddNewField() {
-	TextBox^ Tbox;
-	for (int i = 0; i < COLUMN_NUMBER-1; i++) {
-		Tbox = this->NewTextBox(i);
-		this->Fields.push_back(Tbox);
+	Control^ Con;
+	for (int i = 0; i < COLUMN_NUMBER; i++)
+	{
+		if (i == DELETE_BUTTON_INDEX)
+			Con = this->NewButton(i, "X", &InitativeOrganiser::InitiativeEntry::DeleteButton_Click);
+		else
+			Con = this->NewTextBox(i);
+		this->Fields.push_back(Con);
 	}
 }
 
@@ -128,16 +158,14 @@ void InitiativeEntry::AddNewField() {
 	@brief Highlights all text boxes in this entry to predefined color.
 */
 void InitiativeEntry::SetActive() {
-	for (TextBox^ n : this->Fields) {
+	for (Control^ n : this->Fields)
 		n->Background = ref new SolidColorBrush(Colors::Green);
-	}
 }
 
 /*
 	@brief Deletes special coloring in all text boxes in this entry.
 */
 void InitiativeEntry::SetInactive() {
-	for (TextBox^ n : this->Fields) {
+	for (Control^ n : this->Fields)
 		n->Background = ref new SolidColorBrush();
-	}
 }
